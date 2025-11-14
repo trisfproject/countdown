@@ -15,7 +15,7 @@
     }
 
     body {
-      background-image:url('background.webp'); /* pakai file kamu */
+      background-image:url('background.webp');
       background-size:cover;
       background-position:center;
       background-repeat:no-repeat;
@@ -28,56 +28,58 @@
 
     .overlay {
       background:rgba(0,0,0,0.45);
-      padding:28px;
+      padding:30px;
       border-radius:18px;
-      max-width:980px;
-      width:100%;
+      width:80vw;                 /* 80% dari layar */
+      max-width:1200px;           /* batas maksimal */
       text-align:center;
       box-shadow:0 12px 40px rgba(0,0,0,0.55);
     }
 
     .title {
-      font-size:clamp(18px,3vw,28px);
-      font-weight:600;
-      margin-bottom:10px;
+      font-size:clamp(20px,3vw,32px);
+      font-weight:700;
+      margin-bottom:15px;
     }
 
     .target-info { 
-      font-size:14px;
+      font-size:15px;
       opacity:0.9;
-      margin-bottom:12px;
+      margin-bottom:15px;
     }
 
     .countdown {
       display:flex;
       justify-content:center;
-      gap:12px;
-      margin:16px 0;
+      gap:14px;
+      margin:20px 0;
+      flex-wrap:wrap;
     }
 
     .block {
       background:rgba(255,255,255,0.06);
-      padding:14px;
+      padding:18px 14px;
       border-radius:12px;
-      min-width:70px;
+      min-width:85px;
       backdrop-filter:blur(4px);
     }
 
     .number {
-      font-size:clamp(22px,6vw,48px);
+      font-size:clamp(28px,6vw,52px);
       font-weight:700;
     }
 
     .label {
-      font-size:12px;
+      font-size:13px;
       opacity:0.9;
       text-transform:uppercase;
       margin-top:6px;
+      letter-spacing:1px;
     }
 
     @media (max-width:520px) {
-      .block { min-width:60px; padding:10px; }
-      .countdown { gap:8px; }
+      .block { min-width:70px; padding:12px 10px; }
+      .countdown { gap:10px; }
     }
   </style>
 </head>
@@ -112,7 +114,10 @@
     const targetDate = new Date("2025-12-13T08:00:00+07:00");
 
     function formatReadable(d) {
-      return d.toLocaleString("id-ID", { timeZone: "Asia/Jakarta", timeZoneName: "short" });
+      return d.toLocaleString("id-ID", { 
+        timeZone: "Asia/Jakarta", 
+        timeZoneName: "short" 
+      });
     }
 
     document.getElementById("targetReadable").innerText =
