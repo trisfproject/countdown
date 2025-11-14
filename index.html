@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Countdown Gathering</title>
+
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+
+    html,body {
+      height:100%;
+      font-family:system-ui, Arial, sans-serif;
+      color:white;
+    }
+
+    body {
+      background-image:url('background.webp'); /* pakai file kamu */
+      background-size:cover;
+      background-position:center;
+      background-repeat:no-repeat;
+      background-attachment:fixed;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      padding:20px;
+    }
+
+    .overlay {
+      background:rgba(0,0,0,0.45);
+      padding:28px;
+      border-radius:18px;
+      max-width:980px;
+      width:100%;
+      text-align:center;
+      box-shadow:0 12px 40px rgba(0,0,0,0.55);
+    }
+
+    .title {
+      font-size:clamp(18px,3vw,28px);
+      font-weight:600;
+      margin-bottom:10px;
+    }
+
+    .target-info { 
+      font-size:14px;
+      opacity:0.9;
+      margin-bottom:12px;
+    }
+
+    .countdown {
+      display:flex;
+      justify-content:center;
+      gap:12px;
+      margin:16px 0;
+    }
+
+    .block {
+      background:rgba(255,255,255,0.06);
+      padding:14px;
+      border-radius:12px;
+      min-width:70px;
+      backdrop-filter:blur(4px);
+    }
+
+    .number {
+      font-size:clamp(22px,6vw,48px);
+      font-weight:700;
+    }
+
+    .label {
+      font-size:12px;
+      opacity:0.9;
+      text-transform:uppercase;
+      margin-top:6px;
+    }
+
+    @media (max-width:520px) {
+      .block { min-width:60px; padding:10px; }
+      .countdown { gap:8px; }
+    }
+
+    .controls {
+      margin-top:8px;
+      display:flex;
+      justify-content:center;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .controls input {
+      padding:8px 10px;
+      border-radius:8px;
+      border:none;
+    }
+
+    .controls button {
+      padding:9px 12px;
+      border:none;
+      border-radius:8px;
+      background:#1f8ceb;
+      color:white;
+      font-weight:600;
+      cursor:pointer;
+    }
+
+    .small-note {
+      margin-top:8px;
+      font-size:12px;
+      opacity:0.9;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="overlay">
+    <div class="title">Countdown Event</div>
+    <div class="target-info" id="targetReadable"></div>
+
+    <div class="countdown">
+      <div class="block">
+        <div class="number" id="days">--</div>
+        <div class="label">Hari</div>
+      </div>
+      <div class="block">
+        <div class="number" id="hours">--</div>
+        <div class="label">Jam</div>
+      </div>
+      <div class="block">
+        <div class="number" id="minutes">--</div>
+        <div class="label">Menit</div>
+      </div>
+      <div class="block">
+        <div class="number" id="seconds">--</div>
+        <div class="label">Detik</div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <input type="datetime-local" id="newDate">
+      <button onclick="setNewDate()">Set</button>
+    </div>
+
+    <div class="small-note">Zona waktu mengikuti device kamu.</div>
+  </div>
+
+  <script>
+    function getQueryDate() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get("date") || null;
+    }
+
+    function setNewDate() {
+      const val = document.getElementById("newDate").value;
+      if (!val) return;
+      window.location.search = "?date=" + val;
+    }
+
+    let targetStr = getQueryDate();
+    if (!targetStr) {
+      // default target
+      targetStr = "2025-12-13T10:00:00";
+    }
+
+    let targetDate = new Date(targetStr);
+
+    function formatReadable(d) {
+      return d.toLocaleString("id-ID", { timeZoneName: "short" });
+    }
+
+    document.getElementById("targetReadable").innerText =
+      "Target: " + formatReadable(targetDate);
+
+    function pad(n) { return n.toString().padStart(2, "0"); }
+
+    function update() {
+      const now = new Date();
+      let diff = targetDate - now;
+
+      if (diff <= 0) {
+        document.getElementById("days").innerText = "00";
+        document.getElementById("hours").innerText = "00";
+        document.getElementById("minutes").innerText = "00";
+        document.getElementById("seconds").innerText = "00";
+        document.getElementById("targetReadable").innerText = "Waktu telah tiba!";
+        return;
+      }
+
+      const sec = Math.floor(diff / 1000);
+      const days = Math.floor(sec / 86400);
+      const hours = Math.floor((sec % 86400) / 3600);
+      const minutes = Math.floor((sec % 3600) / 60);
+      const seconds = sec % 60;
+
+      document.getElementById("days").innerText = days;
+      document.getElementById("hours").innerText = pad(hours);
+      document.getElementById("minutes").innerText = pad(minutes);
+      document.getElementById("seconds").innerText = pad(seconds);
+    }
+
+    update();
+    setInterval(update, 1000);
+  </script>
+</body>
+</html>
