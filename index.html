@@ -30,33 +30,33 @@
       background:#021214;
       padding:30px;
       border-radius:18px;
-      width:80vw;                 /* default mobile/tablet */
+      width:80vw;
       max-width:1400px;
       text-align:center;
-      box-shadow:0 12px 40px rgba(0,0,0,0.55);
+
+      /* GLOW */
+      box-shadow:
+        0 0 30px rgba(0,255,200,0.15),
+        0 0 60px rgba(0,255,200,0.1),
+        0 12px 40px rgba(0,0,0,0.55);
     }
 
-    /* Laptop */
     @media (min-width: 768px) {
-      .overlay {
-        width:75vw;
-      }
+      .overlay { width:75vw; }
     }
 
-    /* Desktop */
     @media (min-width: 1024px) {
-      .overlay {
-        width:65vw;
-      }
+      .overlay { width:65vw; }
     }
 
     .title {
       font-size:clamp(20px,3vw,32px);
       font-weight:700;
       margin-bottom:15px;
+      text-shadow:0 0 10px rgba(0,255,200,0.4);
     }
 
-    .target-info { 
+    .target-info {
       font-size:15px;
       opacity:0.9;
       margin-bottom:15px;
@@ -65,9 +65,10 @@
     .countdown {
       display:flex;
       justify-content:center;
-      gap:14px;
+      align-items:center;
+      gap:12px;
       margin:20px 0;
-      flex-wrap:wrap;
+      flex-wrap:nowrap; /* FIX mobile agar sejajar */
     }
 
     .block {
@@ -76,11 +77,18 @@
       border-radius:12px;
       min-width:85px;
       backdrop-filter:blur(4px);
+
+      /* Glow blok */
+      box-shadow:
+        0 0 15px rgba(0,255,200,0.25),
+        0 0 25px rgba(0,255,200,0.15),
+        inset 0 0 10px rgba(0,255,200,0.08);
     }
 
     .number {
       font-size:clamp(28px,6vw,52px);
       font-weight:700;
+      text-shadow:0 0 8px rgba(0,255,200,0.35);
     }
 
     .label {
@@ -89,9 +97,9 @@
       text-transform:uppercase;
       margin-top:6px;
       letter-spacing:1px;
+      text-shadow:0 0 6px rgba(0,255,200,0.2);
     }
 
-    /* Footer */
     .footer {
       margin-top:25px;
       font-size:14px;
@@ -99,11 +107,17 @@
       opacity:0.7;
       border-top:1px solid rgba(255,255,255,0.1);
       padding-top:12px;
+      text-shadow:0 0 6px rgba(0,255,200,0.25);
     }
 
     @media (max-width:520px) {
-      .block { min-width:70px; padding:12px 10px; }
-      .countdown { gap:10px; }
+      .block {
+        min-width:60px;
+        padding:10px 8px;
+      }
+      .number { font-size:28px; }
+      .label { font-size:11px; }
+      .countdown { gap:6px; }
       .footer { font-size:12px; }
     }
   </style>
@@ -119,14 +133,17 @@
         <div class="number" id="days">--</div>
         <div class="label">Hari</div>
       </div>
+
       <div class="block">
         <div class="number" id="hours">--</div>
         <div class="label">Jam</div>
       </div>
+
       <div class="block">
         <div class="number" id="minutes">--</div>
         <div class="label">Menit</div>
       </div>
+
       <div class="block">
         <div class="number" id="seconds">--</div>
         <div class="label">Detik</div>
@@ -134,18 +151,25 @@
     </div>
 
     <div class="footer">
-      komitkabe.id
+      komitkabe.id — Connect • Collaborate • Elevate
     </div>
   </div>
 
   <script>
-    const targetDate = new Date("2025-12-13T08:00+07:00");
+    const targetDate = new Date("2025-12-13T08:00:00+07:00");
 
+    /* Format JAM tanpa detik → 08:00 WIB */
     function formatReadable(d) {
-      return d.toLocaleString("id-ID", { 
-        timeZone: "Asia/Jakarta", 
-        timeZoneName: "short" 
+      const date = d.toLocaleDateString("id-ID", { timeZone: "Asia/Jakarta" });
+
+      const hours = d.toLocaleTimeString("id-ID", {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false,
+        timeZone: "Asia/Jakarta"
       });
+
+      return `${date}, ${hours} WIB`;
     }
 
     document.getElementById("targetReadable").innerText =
@@ -158,24 +182,19 @@
       let diff = targetDate - now;
 
       if (diff <= 0) {
-        document.getElementById("days").innerText = "00";
-        document.getElementById("hours").innerText = "00";
-        document.getElementById("minutes").innerText = "00";
-        document.getElementById("seconds").innerText = "00";
+        days.textContent = "00";
+        hours.textContent = "00";
+        minutes.textContent = "00";
+        seconds.textContent = "00";
         document.getElementById("targetReadable").innerText = "Acara sudah dimulai!";
         return;
       }
 
       const sec = Math.floor(diff / 1000);
-      const days = Math.floor(sec / 86400);
-      const hours = Math.floor((sec % 86400) / 3600);
-      const minutes = Math.floor((sec % 3600) / 60);
-      const seconds = sec % 60;
-
-      document.getElementById("days").innerText = days;
-      document.getElementById("hours").innerText = pad(hours);
-      document.getElementById("minutes").innerText = pad(minutes);
-      document.getElementById("seconds").innerText = pad(seconds);
+      days.textContent = Math.floor(sec / 86400);
+      hours.textContent = pad(Math.floor((sec % 86400) / 3600));
+      minutes.textContent = pad(Math.floor((sec % 3600) / 60));
+      seconds.textContent = pad(sec % 60);
     }
 
     update();
