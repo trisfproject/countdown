@@ -27,14 +27,12 @@
     }
 
     .overlay {
-      background:rgba(2, 18, 20, 0.75); /* Transparan sedikit */
+      background:rgba(2, 18, 20, 0.75); /* transparan */
       padding:30px;
       border-radius:18px;
       width:80vw;
       max-width:1400px;
       text-align:center;
-
-      /* Glow disabled */
       box-shadow:none;
     }
 
@@ -60,8 +58,6 @@
       font-size:clamp(20px,3vw,32px);
       font-weight:700;
       margin-bottom:15px;
-
-      /* Glow off */
       text-shadow:none;
     }
 
@@ -86,16 +82,12 @@
       border-radius:12px;
       min-width:85px;
       backdrop-filter:blur(4px);
-
-      /* Glow disabled */
       box-shadow:none;
     }
 
     .number {
       font-size:clamp(28px,6vw,52px);
       font-weight:700;
-
-      /* Glow off */
       text-shadow:none;
     }
 
@@ -105,8 +97,6 @@
       text-transform:uppercase;
       margin-top:6px;
       letter-spacing:1px;
-
-      /* Glow off */
       text-shadow:none;
     }
 
@@ -117,11 +107,10 @@
       opacity:0.7;
       border-top:1px solid rgba(255,255,255,0.1);
       padding-top:12px;
-
-      /* Glow off */
       text-shadow:none;
     }
 
+    /* Mobile detail */
     @media (max-width:520px) {
       .block { 
         min-width:60px;
@@ -131,6 +120,26 @@
       .label { font-size:11px; }
       .countdown { gap:6px; }
       .footer { font-size:12px; }
+    }
+
+    /* ⭐ Desktop – Perbesar Countdown */
+    @media (min-width:1024px) {
+      .countdown {
+        gap:20px;
+      }
+
+      .block {
+        min-width:110px;
+        padding:22px 18px;
+      }
+
+      .number {
+        font-size:64px;
+      }
+
+      .label {
+        font-size:15px;
+      }
     }
   </style>
 </head>
