@@ -30,10 +30,24 @@
       background:#021214;
       padding:30px;
       border-radius:18px;
-      width:80vw;
-      max-width:1200px;
+      width:80vw;                 /* default mobile/tablet */
+      max-width:1400px;
       text-align:center;
       box-shadow:0 12px 40px rgba(0,0,0,0.55);
+    }
+
+    /* Laptop */
+    @media (min-width: 768px) {
+      .overlay {
+        width:75vw;
+      }
+    }
+
+    /* Desktop */
+    @media (min-width: 1024px) {
+      .overlay {
+        width:65vw;
+      }
     }
 
     .title {
@@ -97,7 +111,7 @@
 
 <body>
   <div class="overlay">
-    <div class="title">Komitkabe Gathering – Countdown</div>
+    <div class="title">Komitkabe Gathering 2025 – Countdown</div>
     <div class="target-info" id="targetReadable"></div>
 
     <div class="countdown">
